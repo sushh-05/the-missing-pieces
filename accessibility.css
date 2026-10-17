@@ -1,0 +1,4 @@
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #661414;outline-offset:3px}
+.source-caption{font:11px/1.45 'DM Sans',sans-serif;color:#f5ebdf;margin:0 0 12px!important;opacity:.88}
+.myth-note{margin-top:22px;padding:16px 18px;border:1px solid #e6cbbd;background:#f8f2eb;font-size:14px;line-height:1.5}.myth-note summary{color:#c04e2a;font-weight:600;cursor:pointer}.myth-note p{margin:12px 0}.myth-note a{color:#661414;font-size:12px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.primary-button,.option,.answer,.piece-slot,.band,.calendar,.progress-track span,.toast{transition:none}.step-panel.active,.reveal.visible{animation:none}}
