@@ -378,3 +378,61 @@ $('restartButton').addEventListener('click', () => {
   say('Pick a question and let’s complete the picture together.');
   show('concernPanel');
 });
+
+// A brief, no-wrong-answer playable hook before the full guide.
+const openingPieces = {
+  personal: 'A personal conversation belongs in the picture.',
+  strength: 'Strength and muscle deserve a place in the conversation.',
+  longview: 'Long-term support belongs in the plan, too.'
+};
+const openingIcons = {
+  personal: '<svg viewBox="0 0 32 32" fill="none"><path d="M16 27s-10-6.2-10-13a5.5 5.5 0 0 1 10-2.8A5.5 5.5 0 0 1 26 14c0 6.8-10 13-10 13Z"/><path d="M12 16h8m-4-4v8"/></svg>',
+  strength: '<svg viewBox="0 0 32 32" fill="none"><path d="M8 11v10m-4-7v4m24-7v10m-4-7v4M8 16h16M12 12v8m8-8v8"/></svg>',
+  longview: '<svg viewBox="0 0 32 32" fill="none"><rect x="5" y="7" width="22" height="21" rx="3"/><path d="M10 4v6m12-6v6M5 13h22m-11 4v5l4 2"/></svg>'
+};
+document.querySelectorAll('[data-opening-piece]').forEach(button => {
+  button.querySelector('.opening-piece-icon').innerHTML = openingIcons[button.dataset.openingPiece];
+});
+const openingMascot = document.createElement('div');
+openingMascot.className = 'opening-mascot';
+openingMascot.setAttribute('aria-hidden', 'true');
+openingMascot.innerHTML = '<svg viewBox="0 0 92 100" fill="none"><path class="mascot-arm" d="m20 56-13 13m65-15 10-13"/><path class="mascot-paper" d="M23 21 66 15l9 60-43 8-9-62Z"/><path d="m31 28 29-4m-27 11 21-3m-20 10 24-4" stroke="#d9b7a6" stroke-width="2" stroke-linecap="round"/><circle cx="41" cy="56" r="2.5" fill="#351d1d"/><circle cx="55" cy="54" r="2.5" fill="#351d1d"/><path d="M43 64c3 4 8 3 10-1" stroke="#c04e2a" stroke-width="2" stroke-linecap="round"/><path class="mascot-scarf" d="m36 72 14-3 5 11-15 3-4-11Z"/><path d="m16 23 2-5m55 3 4-5m5 24 5 1" stroke="#c04e2a" stroke-width="2" stroke-linecap="round"/></svg><span>Tap a piece!</span>';
+document.querySelector('#openingBoard').append(openingMascot);
+let openingFound = new Set();
+let openingFinished = false;
+function finishOpening() {
+  if (openingFinished) return;
+  openingFinished = true;
+  document.body.classList.remove('opening-active');
+  $('openingGame').classList.add('is-leaving');
+  track('opening_game_completed', { pieces: [...openingFound] });
+  setTimeout(() => {
+    $('openingGame').hidden = true;
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }, 360);
+}
+document.querySelectorAll('[data-opening-piece]').forEach(button => {
+  button.addEventListener('click', () => {
+    if (openingFinished) return;
+    const piece = button.dataset.openingPiece;
+    if (openingFound.has(piece)) return;
+    openingFound.add(piece);
+    button.classList.add('is-placed');
+    button.setAttribute('aria-pressed', 'true');
+    button.querySelector('.piece-check').textContent = '✓';
+    $('openingProgressText').textContent = `${openingFound.size} of 3 pieces found`;
+    $('openingProgressBar').style.width = `${openingFound.size / 3 * 100}%`;
+    track('opening_piece_found', { piece, count: openingFound.size });
+    if (openingFound.size === 3) {
+      $('openingBoard').classList.add('is-complete');
+      $('openingFeedback').textContent = 'A fuller picture. Better questions.';
+      setTimeout(finishOpening, 950);
+    } else {
+      $('openingFeedback').textContent = openingPieces[piece];
+    }
+  });
+});
+$('skipOpening').addEventListener('click', () => {
+  track('opening_game_skipped', { pieces_found: openingFound.size });
+  finishOpening();
+});

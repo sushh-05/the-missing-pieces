@@ -10,8 +10,24 @@
   <link rel="stylesheet" href="accessibility.css" />
   <link rel="stylesheet" href="visual-refresh.css" />
   <link rel="stylesheet" href="text-treatment.css" />
+  <link rel="stylesheet" href="opening-game.css" />
 </head>
-<body>
+<body class="opening-active">
+  <section class="opening-game" id="openingGame" aria-labelledby="openingTitle">
+    <div class="opening-topline"><span>STEER · A 10-SECOND PLAY</span><button type="button" id="skipOpening">Skip to the guide <span aria-hidden="true">→</span></button></div>
+    <div class="opening-layout">
+      <div class="opening-copy"><p class="eyebrow"><span class="eyebrow-star">✳</span> A tiny game about the bigger picture</p><h1 id="openingTitle">Everyone talks about the injection.<br><em>What’s missing?</em></h1><p>Tap the care pieces you think belong in the picture.</p><div class="opening-progress"><span id="openingProgressText" aria-live="polite">0 of 3 pieces found</span><span class="opening-progress-track"><i id="openingProgressBar"></i></span></div></div>
+      <div class="opening-board" id="openingBoard" aria-label="A medical weight-management note with three missing care pieces">
+        <div class="opening-orbit orbit-one"></div><div class="opening-orbit orbit-two"></div>
+        <div class="opening-note"><small>ONE PART OF CARE</small><span class="opening-syringe" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="m17 31 14-14m-18 10 6 6m-2-10 6 6m8-16 10 10m-7-13 10 10M13 34l-4 5m28-28 4-4M8 41l7-1-6-6-1 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m24 24 4 4" stroke="currentColor" stroke-width="2"/></svg></span><strong>Medical<br>weight care</strong><span class="opening-note-rule"></span><small>THE PICTURE ISN’T COMPLETE</small></div>
+        <button class="opening-piece piece-personal" type="button" data-opening-piece="personal" aria-pressed="false"><span class="opening-piece-icon" aria-hidden="true">♡</span><span><small>PIECE 01</small><strong>Personal fit</strong></span><b class="piece-check" aria-hidden="true">+</b></button>
+        <button class="opening-piece piece-strength" type="button" data-opening-piece="strength" aria-pressed="false"><span class="opening-piece-icon" aria-hidden="true">↗</span><span><small>PIECE 02</small><strong>Strength</strong></span><b class="piece-check" aria-hidden="true">+</b></button>
+        <button class="opening-piece piece-longview" type="button" data-opening-piece="longview" aria-pressed="false"><span class="opening-piece-icon" aria-hidden="true">◷</span><span><small>PIECE 03</small><strong>Long-term care</strong></span><b class="piece-check" aria-hidden="true">+</b></button>
+        <span class="opening-board-caption" id="openingFeedback" aria-live="polite">Tap a paper piece to place it</span>
+      </div>
+    </div>
+    <p class="opening-footnote">No wrong answers · no score · just a fuller picture</p>
+  </section>
   <main class="app-shell">
     <header class="topbar"><a class="wordmark" href="#top" aria-label="steer home">steer</a><span class="topbar-note">a 45-second guide</span></header>
     <section class="hero" id="top"><div class="hero-main"><p class="eyebrow"><span class="eyebrow-star">✳</span> medical weight management</p><h1>Everyone talks about<br /><em>the injection.</em><br />What’s missing?</h1><p class="hero-copy">Complete the picture of care. Leave with questions you can take to a doctor.</p><button class="primary-button" id="startButton">Find the missing pieces <span>→</span></button><p class="quiet-note"><span>◦</span> No login <span>·</span> no score <span>·</span> just a clearer conversation</p></div><aside class="hero-aside" aria-hidden="true"><div class="aside-ring"></div><div class="aside-paper"><span class="aside-label">a note to keep</span><svg viewBox="0 0 90 70" fill="none"><path d="M11 24h18c0-7 5-12 12-12s12 5 12 12h26v21H55c0 7-5 12-12 12s-12-5-12-12H11V24Z" stroke="currentColor" stroke-width="2"/><path d="M41 23v19m0 0-6-6m6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Good care<br /><em>starts with<br />good questions.</em></strong><span class="aside-foot">keep what matters</span></div><span class="aside-spark">✳</span></aside></section>
