@@ -1,8 +1,8 @@
 # The Missing Pieces
 
-**PS1 — The Ad People Want to Tap** · Steer Hackathon
+**PS1 - The Ad People Want to Tap** · Steer Hackathon
 
-The Missing Pieces is a mobile-first playable ad and short interactive guide about medical weight-management care. Players tap three animated paper pieces—personal fit, strength, and long-term care—to complete the picture, then explore their concern and leave with questions they can take to a doctor.
+The Missing Pieces is a mobile-first playable ad and short interactive guide about medical weight-management care. Players tap three animated paper pieces: personal fit, strength, and long-term care, to complete the picture, then explore their concern and leave with questions they can take to a doctor.
 
 ## Try it
 
