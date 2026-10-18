@@ -8,16 +8,15 @@
 
 ## Why it stands out
 
-It turns a familiar Indian-life scene into a short interaction: a plate, chai, work bag, family invitation and medical note become a fuller picture of care. Each answer gives a different response, and each lesson shows its source context. The user leaves with a concern-specific question card even if they never contact Steer.
+It turns a familiar Indian-life scene into a short game: choose a concern, explore a question, then place that piece into the picture to unlock the next. There is no score or wrong-answer penalty. Each reveal links to its source, and the user leaves with a question card even if they never contact Steer.
 
 ## Demo formats
 
 - `index.html` is the full mobile-first website experience.
 - `playable.html` is the compact playable prototype designed around a 320 × 480 frame. Host the files together and open `playable.html` for the ad-style demo.
 - `placement.html` embeds the playable in a feed-style mockup for the Loom.
-- Add `?hook=question` to `playable.html` to show the alternate hook concept.
 
-The experiences run without an account. The card is downloaded as an SVG image. Continuing to Steer opens `steerclub.com`; this prototype does not transmit answers or integrate with a CRM. The full-page event log is local to the current browser session (`window.steerEvents`) and is not sent to a tracking service.
+The experiences run without an account. The card is downloaded as an SVG image. Continuing to Steer opens `steerclub.com`; this prototype does not transmit answers or integrate with a CRM. Event logs are local to the current browser session (`window.steerEvents` and `window.playableEvents`) and are not sent to a tracking service.
 
 ## Evidence notes
 
