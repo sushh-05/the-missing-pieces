@@ -78,6 +78,8 @@ function track(event, details = {}) {
 }
 track('hook_seen', { hook: 'missing-pieces' });
 $('progressCount').setAttribute('aria-live', 'polite');
+const openingProgress = document.querySelector('.opening-progress');
+$('openingGame').insertBefore(openingProgress, document.querySelector('.opening-layout'));
 
 const companion = document.createElement('aside');
 companion.className = 'game-companion';
@@ -386,12 +388,14 @@ const openingPieces = {
   longview: 'Long-term support belongs in the plan, too.'
 };
 const openingIcons = {
-  personal: '<svg viewBox="0 0 32 32" fill="none"><path d="M16 27s-10-6.2-10-13a5.5 5.5 0 0 1 10-2.8A5.5 5.5 0 0 1 26 14c0 6.8-10 13-10 13Z"/><path d="M12 16h8m-4-4v8"/></svg>',
-  strength: '<svg viewBox="0 0 32 32" fill="none"><path d="M8 11v10m-4-7v4m24-7v10m-4-7v4M8 16h16M12 12v8m8-8v8"/></svg>',
-  longview: '<svg viewBox="0 0 32 32" fill="none"><rect x="5" y="7" width="22" height="21" rx="3"/><path d="M10 4v6m12-6v6M5 13h22m-11 4v5l4 2"/></svg>'
+  personal: '<svg viewBox="0 0 48 48" fill="none"><path class="mascot-arm" d="m9 28-5 5m35-6 5-5"/><path d="M24 5c-8 0-14 6-14 14v13c0 7 6 12 14 12s14-5 14-12V19c0-8-6-14-14-14Z" fill="#f4c9ae" stroke="#ad6348" stroke-width="1.5"/><path d="M18 23v1m12-1v1" stroke="#351d1d" stroke-width="3" stroke-linecap="round"/><path d="M20 30c2 3 6 3 8 0" stroke="#a33d2b" stroke-width="1.8" stroke-linecap="round"/><circle cx="15" cy="28" r="2" fill="#df8b77"/><circle cx="33" cy="28" r="2" fill="#df8b77"/><path d="M24 8c-3-5-10-1-6 4l6 5 6-5c4-4-3-9-6-4Z" fill="#c04e2a"/></svg>',
+  strength: '<svg viewBox="0 0 48 48" fill="none"><path d="M7 20v10m-4-7v4m38-7v10m4-7v4M10 25h28m-22-8v16m16-16v16" stroke="#a85a3e" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="25" r="9" fill="#f4c9ae" stroke="#ad6348" stroke-width="1.5"/><path d="M20 23v1m8-1v1" stroke="#351d1d" stroke-width="2.5" stroke-linecap="round"/><path d="M21 28c2 2 4 2 6 0" stroke="#a33d2b" stroke-width="1.6" stroke-linecap="round"/><path d="m16 14-3-3m19 3 3-3" stroke="#c04e2a" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  longview: '<svg viewBox="0 0 48 48" fill="none"><path d="M9 14a4 4 0 0 1 4-4h22a4 4 0 0 1 4 4v25H9V14Z" fill="#fff8ef" stroke="#ad6348" stroke-width="1.5"/><path d="M9 18h30" stroke="#c04e2a" stroke-width="4"/><path d="M17 7v7m14-7v7" stroke="#ad6348" stroke-width="2.5" stroke-linecap="round"/><path d="M19 26v1m10-1v1" stroke="#351d1d" stroke-width="2.5" stroke-linecap="round"/><path d="M21 32c2 2 4 2 6 0" stroke="#a33d2b" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="31" r="1.8" fill="#df8b77"/><circle cx="31" cy="31" r="1.8" fill="#df8b77"/><path d="m14 22-3-2m26 2 3-2" stroke="#c04e2a" stroke-width="1.5" stroke-linecap="round"/></svg>'
 };
 document.querySelectorAll('[data-opening-piece]').forEach(button => {
   button.querySelector('.opening-piece-icon').innerHTML = openingIcons[button.dataset.openingPiece];
+  button.querySelector('.opening-piece-icon').classList.add('piece-character');
+  button.querySelector('.opening-piece small').remove();
 });
 const openingMascot = document.createElement('div');
 openingMascot.className = 'opening-mascot';
@@ -403,6 +407,7 @@ let openingFinished = false;
 function finishOpening() {
   if (openingFinished) return;
   openingFinished = true;
+  $('openingGame').inert = false;
   document.body.classList.remove('opening-active');
   $('openingGame').classList.add('is-leaving');
   track('opening_game_completed', { pieces: [...openingFound] });
@@ -410,6 +415,13 @@ function finishOpening() {
     $('openingGame').hidden = true;
     window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }, 360);
+}
+function showOpeningReveal() {
+  const reveal = $('openingReveal');
+  reveal.hidden = false;
+  $('openingGame').inert = true;
+  track('opening_reveal_shown', { pieces: [...openingFound] });
+  setTimeout(() => $('openingContinue').focus(), 1050);
 }
 document.querySelectorAll('[data-opening-piece]').forEach(button => {
   button.addEventListener('click', () => {
@@ -426,7 +438,7 @@ document.querySelectorAll('[data-opening-piece]').forEach(button => {
     if (openingFound.size === 3) {
       $('openingBoard').classList.add('is-complete');
       $('openingFeedback').textContent = 'A fuller picture. Better questions.';
-      setTimeout(finishOpening, 950);
+      setTimeout(showOpeningReveal, 520);
     } else {
       $('openingFeedback').textContent = openingPieces[piece];
     }
@@ -435,4 +447,15 @@ document.querySelectorAll('[data-opening-piece]').forEach(button => {
 $('skipOpening').addEventListener('click', () => {
   track('opening_game_skipped', { pieces_found: openingFound.size });
   finishOpening();
+});
+$('openingContinue').addEventListener('click', () => {
+  track('opening_reveal_continued');
+  finishOpening();
+});
+$('openingReveal').addEventListener('keydown', event => {
+  if (event.key === 'Escape') $('openingContinue').click();
+  if (event.key === 'Tab') {
+    event.preventDefault();
+    $('openingContinue').focus();
+  }
 });
