@@ -407,6 +407,7 @@ let openingFinished = false;
 function finishOpening() {
   if (openingFinished) return;
   openingFinished = true;
+  $('openingReveal').hidden = true;
   $('openingGame').inert = false;
   document.body.classList.remove('opening-active');
   $('openingGame').classList.add('is-leaving');
