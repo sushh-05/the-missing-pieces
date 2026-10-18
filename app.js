@@ -252,6 +252,13 @@ document.querySelectorAll('[data-concern]').forEach(button => {
   });
 });
 
+document.querySelectorAll('[data-quick-concern]').forEach(button => {
+  button.addEventListener('click', () => {
+    track('hero_quick_start', { concern: button.dataset.quickConcern });
+    document.querySelector(`[data-concern="${button.dataset.quickConcern}"]`).click();
+  });
+});
+
 $('backToConcern').addEventListener('click', () => {
   pieceIndex = 0;
   answersChosen = {};
